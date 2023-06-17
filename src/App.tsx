@@ -1,18 +1,12 @@
-import { Badge, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
+import { Badge, Grid, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
 import { AgendaItem } from './components/AgendaItem';
 import { SectionedProgressBar } from './components/ProgressBars';
+import { MyRingProgress } from './components/RingProgress';
 
-
-const defaultAgenda: AgendaItem[] = [
-  { name: 'Item 1', description: 'Description 1', duration: 10 },
-  { name: 'Item 2', description: 'Description 2', duration: 20 },
-  { name: 'Item 3', description: 'Description 3', duration: 30 },
-  { name: 'Item 4', description: 'Description 3', duration: 10 },
-];
 
 export default function App() {
   const [agenda, setAgenda] = useState<AgendaItem[]>(defaultAgenda);
@@ -85,42 +79,113 @@ export default function App() {
         <Header height={50}><h1>Meeting Agenda Timer</h1></Header>
         <Space h="lg" />
 
-        <Paper shadow="xl" radius="md" p="md" withBorder >
-          <Group position="center">
-            <Text>Meeting date</Text>
-            <DateTimePicker
-              valueFormat="DD MMM YYYY hh:mm A"
-              label="Pick date and time"
-              placeholder="Pick date and time"
-              maw={400}
-              value={date}
-              onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
-            />
-            <Button onClick={handleStartMeeting}>Start meeting</Button>
+        <Paper shadow="xl" radius="md" p="md" withBorder maw={1200}>
+          <Group position="left">
+            <Flex
+              mih={50}
+              gap="sm"
+              justify="flex-start"
+              align="flex-end"
+              direction="row"
+              wrap="wrap"
+            >
+              <DateTimePicker
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Pick date and time"
+                placeholder="Pick date and time"
+                maw={200}
+                value={date}
+                onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
+              />
+              <Button onClick={handleStartMeeting}>Start meeting</Button>
+            </Flex>
           </Group>
           <Textarea
             placeholder="Item 1: Description 1: 10"
             label="Agenda"
-            size="lg"
+            size="sm"
             onChange={(event) => handleAgendaChange(event)}
           />
-          <Space h="lg" />
-          <Divider></Divider>
-          <Space h="lg" />
-          <Progress value={progress} label={Math.floor(elapsed).toString() + ` minutes elapsed`} size="xl" radius="xl" />
-          <SectionedProgressBar agenda={defaultAgenda} />
+          <Space h="sm" />
+          <Divider
+            my="xs"
+            variant="dashed"
+            labelPosition="center"
+            label={<Box ml={5}>Search results</Box>}
+          />
+          <Space h="sm" />
+
           {/* <Stack spacing="md"> */}
-          <Flex>
-            {currentItem ? (<><Text>Current Item: </Text><Box w={200}><Badge variant="filled" fullWidth>{currentItem.name}</Badge></Box></>) : (<Text>Meeting not started or finished.</Text>)}
-          </Flex>
-          <Flex>
-            {currentItem ? (<><Text>Description: </Text><Box w={200}><Badge variant="filled" fullWidth>{currentItem.description}</Badge></Box></>) : (<Text>Meeting not started or finished.</Text>)}
-          </Flex>
+          {elapsed > 0 && elapsed < 1 && <Text>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+          {elapsed >= 1 && elapsed < 2 && <Text>Elapsed: {Math.floor(elapsed)} minute</Text>}
+          {elapsed >= 2 && <Text>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+
+          {elapsed > 0 && <Progress value={progress} label={Math.floor(elapsed).toString() + ` minutes elapsed`} size="xl" radius="xl" />}
+          <SectionedProgressBar agenda={defaultAgenda} />
+          <Space h="lg" />
+
+          {/* <Group position="left"> */}
+          {currentItem && (
+            <>
+              <Grid columns={2}>
+                <Grid.Col span="content">
+                  <Flex
+                    mih={50}
+                    gap="xs"
+                    justify="flex-start"
+                    align="flex-start"
+                    direction="column"
+                    wrap="wrap"
+                  >
+                    <Text>Current Item:</Text>
+                    <Text>Description:</Text>
+                    <Text>Duration:</Text>
+                  </Flex>
+                </Grid.Col>
+
+                <Grid.Col span="auto">
+                  <Flex
+                    mih={50}
+                    gap="sm"
+                    justify="flex-start"
+                    align="flex-start"
+                    direction="column"
+                    wrap="wrap"
+                  >
+                    <Text>{currentItem.name}</Text>
+                    <Text>{currentItem.description}</Text>
+                    <Text>{currentItem.duration}</Text>
+                  </Flex>
+                </Grid.Col>
+              </Grid>
+
+              {/* <Flex>
+                <Text>Description: {currentItem.description}</Text>
+                <Box w={200}>
+                  <Text>{currentItem.description}</Text>
+                </Box>
+              </Flex>
+              <Flex>
+                <Text>Duration: {currentItem.duration} minutes</Text>
+                <Box w={200}>
+                  <Text>{currentItem.duration} minutes</Text>
+                </Box>
+              </Flex> */}
+            </>)}
+
+          {!currentItem && <Flex><Text>Meeting not started or already finished.</Text></Flex>}
           {/* </Stack> */}
-          <br />
+          {/* <MyRingProgress value={progress} color={"red"}/> */}
+          {/* </Group> */}
         </Paper>
       </LocalizationProvider>
     </>
 
   );
 }
+
+const defaultAgenda: AgendaItem[] = [
+  { name: 'Item 1', description: 'Description 1', duration: 10 },
+  { name: 'Item 2', description: 'Description 2', duration: 20 },
+  { name: 'Item 3', description: 'Description 3', duration: 30 },
+];
