@@ -157,6 +157,11 @@ export default function App() {
                     <Text>{currentItem.duration}</Text>
                   </Flex>
                 </Grid.Col>
+                <Grid.Col span="auto">
+                <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"}/>
+
+
+                </Grid.Col>
               </Grid>
 
               {/* <Flex>
@@ -175,7 +180,7 @@ export default function App() {
 
           {!currentItem && <Flex><Text>Meeting not started or already finished.</Text></Flex>}
           {/* </Stack> */}
-          {/* <MyRingProgress value={progress} color={"red"}/> */}
+
           {/* </Group> */}
         </Paper>
       </LocalizationProvider>
