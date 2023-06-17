@@ -1,16 +1,17 @@
-import { Button, Text, Textarea, Progress } from '@mantine/core';
+import { Badge, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
-import { TooltipProgressBar, SectionedProgressBar, StripedProgressBar } from './manProgress';
-import { AgendaItem } from './AgendaItem';
+import { AgendaItem } from './components/AgendaItem';
+import { SectionedProgressBar } from './components/ProgressBars';
 
 
 const defaultAgenda: AgendaItem[] = [
   { name: 'Item 1', description: 'Description 1', duration: 10 },
   { name: 'Item 2', description: 'Description 2', duration: 20 },
   { name: 'Item 3', description: 'Description 3', duration: 30 },
+  { name: 'Item 4', description: 'Description 3', duration: 10 },
 ];
 
 export default function App() {
@@ -81,28 +82,43 @@ export default function App() {
     <>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        {/* <SimpleGrid cols={2} spacing="lg"> */}
-        <DateTimePicker
-          valueFormat="DD MMM YYYY hh:mm A"
-          label="Pick date and time"
-          placeholder="Pick date and time"
-          maw={400}
-          onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
-        />
-        <Button onClick={handleStartMeeting}>Start meeting</Button>
-        <Textarea
-          placeholder="Item 1: Description 1: 10"
-          label="Agenda"
-          size="lg"
-          onChange={(event) => handleAgendaChange(event)}
-        />
-        <br />
-        <StripedProgressBar value={progress} />
-        {currentItem ? <Text>Current item: {currentItem.name}</Text> : <Text>Meeting not started or finished.</Text>}
-        <br />
-        <Progress value={75} label={Math.floor(elapsed).toString()+` minutes elapsed`} size="xl" radius="xl" />
-        <TooltipProgressBar value={elapsed} />
-        <SectionedProgressBar />
+        <Header height={50}><h1>Meeting Agenda Timer</h1></Header>
+        <Space h="lg" />
+
+        <Paper shadow="xl" radius="md" p="md" withBorder >
+          <Group position="center">
+            <Text>Meeting date</Text>
+            <DateTimePicker
+              valueFormat="DD MMM YYYY hh:mm A"
+              label="Pick date and time"
+              placeholder="Pick date and time"
+              maw={400}
+              value={date}
+              onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
+            />
+            <Button onClick={handleStartMeeting}>Start meeting</Button>
+          </Group>
+          <Textarea
+            placeholder="Item 1: Description 1: 10"
+            label="Agenda"
+            size="lg"
+            onChange={(event) => handleAgendaChange(event)}
+          />
+          <Space h="lg" />
+          <Divider></Divider>
+          <Space h="lg" />
+          <Progress value={progress} label={Math.floor(elapsed).toString() + ` minutes elapsed`} size="xl" radius="xl" />
+          <SectionedProgressBar agenda={defaultAgenda} />
+          {/* <Stack spacing="md"> */}
+          <Flex>
+            {currentItem ? (<><Text>Current Item: </Text><Box w={200}><Badge variant="filled" fullWidth>{currentItem.name}</Badge></Box></>) : (<Text>Meeting not started or finished.</Text>)}
+          </Flex>
+          <Flex>
+            {currentItem ? (<><Text>Description: </Text><Box w={200}><Badge variant="filled" fullWidth>{currentItem.description}</Badge></Box></>) : (<Text>Meeting not started or finished.</Text>)}
+          </Flex>
+          {/* </Stack> */}
+          <br />
+        </Paper>
       </LocalizationProvider>
     </>
 
