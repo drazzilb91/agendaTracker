@@ -13,7 +13,7 @@ const defaultAgenda: AgendaItem[] = [
   { name: 'Item 3', description: 'Description 3', duration: 30 },
 ];
 
-export default function FirstComponent() {
+export default function App() {
   const [agenda, setAgenda] = useState<AgendaItem[]>(defaultAgenda);
   const [date, setDate] = useState<Date | null>(new Date());
   const [time, setTime] = useState<Date | null>(new Date());
@@ -90,7 +90,6 @@ export default function FirstComponent() {
           onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
         />
         <Button onClick={handleStartMeeting}>Start meeting</Button>
-        {/* </SimpleGrid> */}
         <Textarea
           placeholder="Item 1: Description 1: 10"
           label="Agenda"
@@ -101,13 +100,9 @@ export default function FirstComponent() {
         <StripedProgressBar value={progress} />
         {currentItem ? <Text>Current item: {currentItem.name}</Text> : <Text>Meeting not started or finished.</Text>}
         <br />
-      <Progress value={75} label={elapsed.toString()} size="xl" radius="xl" />
+        <Progress value={75} label={Math.floor(elapsed).toString()+` minutes elapsed`} size="xl" radius="xl" />
         <TooltipProgressBar value={elapsed} />
-        <br />
         <SectionedProgressBar />
-        <br />
-        {/* <LinearProgress determinate color="success" value={progress} /> */}
-
       </LocalizationProvider>
     </>
 

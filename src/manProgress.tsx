@@ -24,7 +24,7 @@ export function SectionedProgressBar() {
 
 export function TooltipProgressBar({ value }: StripedProgressBarProps, agenda?: AgendaItem[]) {
     if (!agenda) {
-        return <Progress color="teal" size={50} value={value} striped animate />;
+        return <Progress color="teal" size={50} value={value}  striped animate />;
     }
     
   return (
