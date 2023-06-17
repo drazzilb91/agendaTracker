@@ -1,4 +1,4 @@
-import { Badge, Grid, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
+import { Grid, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "terminalwebapp"
+  },
+  "targets": {
+    "terminalwebapp": {
+      "hosting": {
+        "agendaclock": [
+          "agendaclock"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

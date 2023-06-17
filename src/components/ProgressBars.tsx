@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
-import { Progress, Text, ProgressProps} from '@mantine/core';
+import { Progress, ProgressProps } from '@mantine/core';
 import { AgendaItem } from './AgendaItem';
-import {colors} from '../helpers/colors'
+import { colors } from '../helpers/colors';
 
 type SectionedProgressBarProps = {
   agenda: AgendaItem[];
@@ -10,6 +10,7 @@ type SectionedProgressBarProps = {
 
 export function SectionedProgressBar({ agenda }: SectionedProgressBarProps) {
   const [hovered, setHovered] = useState(-1);
+  console.log(hovered);
   const reset = () => setHovered(-1);
 
   const mySections: ProgressProps["sections"] = agenda.map((item, index) => ({
