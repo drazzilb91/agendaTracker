@@ -120,8 +120,8 @@ export default function App() {
           {elapsed >= 1 && elapsed < 2 && <Text>Elapsed: {Math.floor(elapsed)} minute</Text>}
           {elapsed >= 2 && <Text>Elapsed: {Math.floor(elapsed)} minutes</Text>}
 
-          {elapsed > 0 && <Progress value={progress} label={Math.floor(elapsed).toString() + ` minutes elapsed`} size="xl" radius="xl" />}
-          <SectionedProgressBar agenda={defaultAgenda} />
+          {elapsed > 0 && <Progress value={progress} size="xl" radius="xl" />}
+          <SectionedProgressBar agenda={agenda} />
           <Space h="lg" />
 
           {/* <Group position="left"> */}
