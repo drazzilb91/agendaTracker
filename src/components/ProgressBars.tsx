@@ -13,7 +13,7 @@ type SectionedProgressBarProps = {
 
 export function SectionedProgressBar({ agenda, totalDuration, textSize }: SectionedProgressBarProps) {
   const [hovered, setHovered] = useState(-1);
-  console.log(hovered);
+  hovered;
   const reset = () => setHovered(-1);
 
   const mySections: ProgressProps["sections"] = agenda.map((item, index) => ({

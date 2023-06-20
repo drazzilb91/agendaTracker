@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Collapse, Divider, Flex, Grid, Paper, Progress, Space, Text, Textarea, Title } from '@mantine/core';
+import { Button, Chip, Collapse, Divider, Flex, Grid, Paper, Progress, Space, Text, Textarea, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -6,10 +6,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { AgendaItem } from './components/AgendaItem';
+import { FooterCentered } from './components/Footer';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
-import { set } from 'date-fns';
-import { FooterCentered } from './components/Footer';
 
 
 export default function App() {
@@ -29,10 +28,10 @@ export default function App() {
   // Calculate total duration of the meeting in minutes
   const totalDuration = agenda.reduce((acc, item) => acc + item.duration, 0);
 
-  const links = [
-    { link: 'https://www.google.com', label: 'Home'},
-    { link: 'https://www.google.com', label: 'About'},
-  ];
+  // const links = [
+  //   { link: 'https://www.google.com', label: 'Home'},
+  //   { link: 'https://www.google.com', label: 'About'},
+  // ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -80,21 +79,41 @@ export default function App() {
   // };
 
 
-  const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextareaValue(event.target.value);
-    const items = event.target.value.split('\n').map(line => {
+  /**
+   * Parse agenda text into an array of AgendaItem objects
+   *
+   * @param {string} text
+   * @return {*} 
+   */
+  function parseAgenda(text: string) {
+    const items = text.split('\n').map(line => {
       const [name, description, duration] = line.split(':');
       if (!duration || isNaN(Number(duration))) {
         return null; // ignore lines without a valid duration
       }
       return { name, description, duration: Number(duration) };
     }).filter((item): item is AgendaItem => item !== null);
+    return items;
+  }
+
+
+  const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(event.target.value);
+    const items = parseAgenda(event.target.value);
+    // const items = event.target.value.split('\n').map(line => {
+    //   const [name, description, duration] = line.split(':');
+    //   if (!duration || isNaN(Number(duration))) {
+    //     return null; // ignore lines without a valid duration
+    //   }
+    //   return { name, description, duration: Number(duration) };
+    // }).filter((item): item is AgendaItem => item !== null);
     setAgenda(items);
   }
 
   const pasteSample = () => {
-    const sample = `Introduction: 5`;
+    const sample = `Welcome and Introduction: CEO John Smith will kick off the meeting : 15\nCompany Updates: CFO Laura Green to present Q2 financial results : 10\nCustomer Feedback: Customer Service Manager Alex Brown will share recent customer feedback and insights : 10\nQ&A Session: Open floor for questions and discussions : 10\nClosing Remarks: CEO John Smith will summarize the meeting's key points and next steps : 15`;
     setTextareaValue(sample);
+    setAgenda(parseAgenda(sample));
   }
 
 
@@ -145,9 +164,7 @@ export default function App() {
             <Textarea
               value={textareaValue}
               label="Agenda"
-              placeholder="Item 1 : Description 1 : 10
-              Item 2 : Description 2 : 20
-              Item 3 : Description 3 : 30"
+              placeholder={`Item 1 : Description 1 : 10\nItem 2 : Description 2 : 20\nItem 3 : Description 3 : 30`}
               autosize
               minRows={2}
               maxRows={10}
@@ -218,7 +235,7 @@ export default function App() {
 
           {!currentItem && <Flex><Text>Meeting not started or already finished.</Text></Flex>}
         </Paper >
-        <FooterCentered links={links} />
+        <FooterCentered />
       </LocalizationProvider >
     </>
 

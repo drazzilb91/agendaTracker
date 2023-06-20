@@ -1,6 +1,4 @@
-import { createStyles, Anchor, Group, rem } from '@mantine/core';
-import { MantineLogo } from '@mantine/ds';
-import { Text } from '@mantine/core';
+import { Text, createStyles, rem } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -30,24 +28,24 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface FooterCenteredProps {
-  links: { link: string; label: string }[];
-}
+// interface FooterCenteredProps {
+//   links: { link: string; label: string }[];
+// }
 
-export function FooterCentered({ links }: FooterCenteredProps) {
+export function FooterCentered() {
   const { classes } = useStyles();
-  const items = links.map((link) => (
-    <Anchor<'a'>
-      color="dimmed"
-      key={link.label}
-      href={link.link}
-      sx={{ lineHeight: 1 }}
-      onClick={(event) => event.preventDefault()}
-      size="sm"
-    >
-      {link.label}
-    </Anchor>
-  ));
+  // const items = links.map((link) => (
+  //   <Anchor<'a'>
+  //     color="dimmed"
+  //     key={link.label}
+  //     href={link.link}
+  //     sx={{ lineHeight: 1 }}
+  //     onClick={(event) => event.preventDefault()}
+  //     size="sm"
+  //   >
+  //     {link.label}
+  //   </Anchor>
+  // ));
 
   return (
     <div className={classes.footer}>
