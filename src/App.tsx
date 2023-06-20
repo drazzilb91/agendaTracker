@@ -9,6 +9,7 @@ import { AgendaItem } from './components/AgendaItem';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
 import { set } from 'date-fns';
+import { FooterCentered } from './components/Footer';
 
 
 export default function App() {
@@ -27,6 +28,11 @@ export default function App() {
 
   // Calculate total duration of the meeting in minutes
   const totalDuration = agenda.reduce((acc, item) => acc + item.duration, 0);
+
+  const links = [
+    { link: 'https://www.google.com', label: 'Home'},
+    { link: 'https://www.google.com', label: 'About'},
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -212,6 +218,7 @@ export default function App() {
 
           {!currentItem && <Flex><Text>Meeting not started or already finished.</Text></Flex>}
         </Paper >
+        <FooterCentered links={links} />
       </LocalizationProvider >
     </>
 
