@@ -1,4 +1,4 @@
-import { Grid, Box, Button, Divider, Flex, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
+import { Title, Box, Button, Chip, Collapse, Divider, Flex, Grid, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { AgendaItem } from './components/AgendaItem';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
+import { useDisclosure } from '@mantine/hooks';
+import { useMediaQuery } from 'react-responsive';
 
 
 export default function App() {
@@ -16,6 +18,10 @@ export default function App() {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [currentItem, setCurrentItem] = useState<AgendaItem | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [opened, { toggle }] = useDisclosure(true);
+  const [isStriped, setIsStriped] = useState(true);
+  const [isAnimated, setIsAnimated] = useState(true);
+  const isMobile = useMediaQuery({ maxWidth: 500 }); // set the maximum width for mobile devices
 
   // Calculate total duration of the meeting in minutes
   const totalDuration = agenda.reduce((acc, item) => acc + item.duration, 0);
@@ -47,6 +53,7 @@ export default function App() {
 
   // ...
   const handleStartMeeting = () => {
+
     if (date && time) {
       const startDateTime = new Date(
         date.getFullYear(),
@@ -60,6 +67,7 @@ export default function App() {
       setStartTime(startDateTime);
     } else {
       setStartTime(new Date());
+      console.warn('handleStartMeeting : date and time vars are null');
     }
   };
 
@@ -67,20 +75,24 @@ export default function App() {
   const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const items = event.target.value.split('\n').map(line => {
       const [name, description, duration] = line.split(':');
+      if (!duration || isNaN(Number(duration))) {
+        return null; // ignore lines without a valid duration
+      }
       return { name, description, duration: Number(duration) };
-    });
+    }).filter((item): item is AgendaItem => item !== null);
     setAgenda(items);
   }
-
+  // ******************************************************
   return (
     <>
-
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Header height={50}><h1>Meeting Agenda Timer</h1></Header>
+        <Title order={3} align="center">Meeting Agenda Timer</Title>
         <Space h="lg" />
 
         <Paper shadow="xl" radius="md" p="md" withBorder maw={1200}>
-          <Group position="left">
+          <Button onClick={toggle} size='xs'>Collapse/Expand</Button>
+          <Collapse in={opened} transitionDuration={2000} transitionTimingFunction="linear">
+            {/* <Group position="left"> */}
             <Flex
               mih={50}
               gap="sm"
@@ -90,6 +102,7 @@ export default function App() {
               wrap="wrap"
             >
               <DateTimePicker
+                size='xs'
                 valueFormat="DD MMM YYYY hh:mm A"
                 label="Pick date and time"
                 placeholder="Pick date and time"
@@ -97,34 +110,51 @@ export default function App() {
                 value={date}
                 onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
               />
-              <Button onClick={handleStartMeeting}>Start meeting</Button>
+              <Flex justify="flex-start" align="center" direction="row" wrap="wrap" gap="sm">
+                <Button onClick={handleStartMeeting} size='xs'>Start meeting</Button>
+                <Chip defaultChecked={isStriped} variant="filled" color='dark' size='xs' onChange={(event) => { setIsStriped(event.valueOf()); }}>Striped</Chip>
+                <Chip defaultChecked={isAnimated} variant="filled" color='dark' size='xs' onChange={(event) => { setIsAnimated(event.valueOf()); }}>Animated</Chip>
+              </Flex>
             </Flex>
-          </Group>
-          <Textarea
-            placeholder="Item 1: Description 1: 10"
-            label="Agenda"
-            size="sm"
-            onChange={(event) => handleAgendaChange(event)}
-          />
-          <Space h="sm" />
-          <Divider
-            my="xs"
-            variant="dashed"
-            labelPosition="center"
-            label={<Box ml={5}>Search results</Box>}
-          />
+            <Textarea
+              label="Agenda"
+              // placeholder="Item 1: Description 1: 10"
+              placeholder="Item 1 : Description 1 : 10
+              Item 2 : Description 2 : 20
+              Item 3 : Description 3 : 30"
+              autosize
+              minRows={2}
+              maxRows={10}
+              size="xs"
+              onChange={(event) => handleAgendaChange(event)}
+            />
+            <Space h="sm" />
+            <Divider
+              my="xs"
+              variant="dashed"
+              labelPosition="center"
+              label={<Box ml={5}>Resultant Agenda Timer</Box>}
+            />
+          </Collapse>
           <Space h="sm" />
 
-          {/* <Stack spacing="md"> */}
-          {elapsed > 0 && elapsed < 1 && <Text>Elapsed: {Math.floor(elapsed)} minutes</Text>}
-          {elapsed >= 1 && elapsed < 2 && <Text>Elapsed: {Math.floor(elapsed)} minute</Text>}
-          {elapsed >= 2 && <Text>Elapsed: {Math.floor(elapsed)} minutes</Text>}
-
-          {elapsed > 0 && <Progress value={progress} size="xl" radius="xl" />}
-          <SectionedProgressBar agenda={agenda} />
+          {currentItem && <Grid >
+            <Grid.Col span="content">
+              <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"} />
+            </Grid.Col>
+            <Grid.Col span={10} >
+            
+                {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+                {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
+                {elapsed >= 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+                <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animate={isAnimated} />
+                <SectionedProgressBar agenda={agenda} totalDuration={totalDuration} textSize={isMobile ? 15 : 25} />
+              
+            </Grid.Col>
+          </Grid>
+          }
           <Space h="lg" />
 
-          {/* <Group position="left"> */}
           {currentItem && (
             <>
               <Grid columns={2}>
@@ -137,53 +167,35 @@ export default function App() {
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text>Current Item:</Text>
-                    <Text>Description:</Text>
-                    <Text>Duration:</Text>
+                    <Text size={isMobile ? 'xs' : 'l'} >Current Item:</Text>
+                    <Text size={isMobile ? 'xs' : 'l'} >Duration:</Text>
+                    <Text size={isMobile ? 'xs' : 'l'} >Description:</Text>
                   </Flex>
                 </Grid.Col>
 
                 <Grid.Col span="auto">
                   <Flex
                     mih={50}
-                    gap="sm"
+                    gap="xs"
                     justify="flex-start"
                     align="flex-start"
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text>{currentItem.name}</Text>
-                    <Text>{currentItem.description}</Text>
-                    <Text>{currentItem.duration}</Text>
+                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.name}</Text>
+                    {/* <Text>{currentItem.duration} minutes</Text> */}
+                    {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minute</Text>}
+                    {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minutes</Text>}
+                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.description}</Text>
                   </Flex>
-                </Grid.Col>
-                <Grid.Col span="auto">
-                <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"}/>
-
-
                 </Grid.Col>
               </Grid>
 
-              {/* <Flex>
-                <Text>Description: {currentItem.description}</Text>
-                <Box w={200}>
-                  <Text>{currentItem.description}</Text>
-                </Box>
-              </Flex>
-              <Flex>
-                <Text>Duration: {currentItem.duration} minutes</Text>
-                <Box w={200}>
-                  <Text>{currentItem.duration} minutes</Text>
-                </Box>
-              </Flex> */}
             </>)}
 
           {!currentItem && <Flex><Text>Meeting not started or already finished.</Text></Flex>}
-          {/* </Stack> */}
-
-          {/* </Group> */}
-        </Paper>
-      </LocalizationProvider>
+        </Paper >
+      </LocalizationProvider >
     </>
 
   );
