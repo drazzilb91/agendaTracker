@@ -1,21 +1,21 @@
-import { Title, Box, Button, Chip, Collapse, Divider, Flex, Grid, Group, Header, Paper, Progress, Space, Text, Textarea } from '@mantine/core';
+import { Box, Button, Chip, Collapse, Divider, Flex, Grid, Paper, Progress, Space, Text, Textarea, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
+import { useDisclosure } from '@mantine/hooks';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { AgendaItem } from './components/AgendaItem';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
-import { useDisclosure } from '@mantine/hooks';
-import { useMediaQuery } from 'react-responsive';
 
 
 export default function App() {
   const [agenda, setAgenda] = useState<AgendaItem[]>(defaultAgenda);
-  const [date, setDate] = useState<Date | null>(new Date());
-  const [time, setTime] = useState<Date | null>(new Date());
+  // const [date, setDate] = useState<Date | null>(new Date());
+  // const [time, setTime] = useState<Date | null>(new Date());
   const [progress, setProgress] = useState(0);
-  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [currentItem, setCurrentItem] = useState<AgendaItem | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [opened, { toggle }] = useDisclosure(true);
@@ -52,24 +52,24 @@ export default function App() {
   }, [startTime, totalDuration, agenda]);
 
   // ...
-  const handleStartMeeting = () => {
+  // const handleStartMeeting = () => {
 
-    if (date && time) {
-      const startDateTime = new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        time.getHours(),
-        time.getMinutes(),
-        time.getSeconds()
-      );
+  //   if (date && time) {
+  //     const startDateTime = new Date(
+  //       date.getFullYear(),
+  //       date.getMonth(),
+  //       date.getDate(),
+  //       time.getHours(),
+  //       time.getMinutes(),
+  //       time.getSeconds()
+  //     );
 
-      setStartTime(startDateTime);
-    } else {
-      setStartTime(new Date());
-      console.warn('handleStartMeeting : date and time vars are null');
-    }
-  };
+  //     setStartTime(startDateTime);
+  //   } else {
+  //     setStartTime(new Date());
+  //     console.warn('handleStartMeeting : date and time vars are null');
+  //   }
+  // };
 
 
   const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -92,7 +92,6 @@ export default function App() {
         <Paper shadow="xl" radius="md" p="md" withBorder maw={1200}>
           <Button onClick={toggle} size='xs'>Collapse/Expand</Button>
           <Collapse in={opened} transitionDuration={2000} transitionTimingFunction="linear">
-            {/* <Group position="left"> */}
             <Flex
               mih={50}
               gap="sm"
@@ -107,18 +106,26 @@ export default function App() {
                 label="Pick date and time"
                 placeholder="Pick date and time"
                 maw={200}
+                value={startTime}
+                onChange={(newValue) => { setStartTime(newValue); }}
+              />
+                            {/* <DateTimePicker
+                size='xs'
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Pick date and time"
+                placeholder="Pick date and time"
+                maw={200}
                 value={date}
                 onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
-              />
+              /> */}
               <Flex justify="flex-start" align="center" direction="row" wrap="wrap" gap="sm">
-                <Button onClick={handleStartMeeting} size='xs'>Start meeting</Button>
+                {/* <Button onClick={handleStartMeeting} size='xs'>Start meeting</Button> */}
                 <Chip defaultChecked={isStriped} variant="filled" color='dark' size='xs' onChange={(event) => { setIsStriped(event.valueOf()); }}>Striped</Chip>
                 <Chip defaultChecked={isAnimated} variant="filled" color='dark' size='xs' onChange={(event) => { setIsAnimated(event.valueOf()); }}>Animated</Chip>
               </Flex>
             </Flex>
             <Textarea
               label="Agenda"
-              // placeholder="Item 1: Description 1: 10"
               placeholder="Item 1 : Description 1 : 10
               Item 2 : Description 2 : 20
               Item 3 : Description 3 : 30"
@@ -129,12 +136,9 @@ export default function App() {
               onChange={(event) => handleAgendaChange(event)}
             />
             <Space h="sm" />
-            <Divider
-              my="xs"
-              variant="dashed"
-              labelPosition="center"
-              label={<Box ml={5}>Resultant Agenda Timer</Box>}
-            />
+            <Divider my="xl" variant="dashed" labelPosition="center" label={
+                <Text style={{fontSize: isMobile ? '0.75rem' : '1rem'}}>Resultant Agenda Timer</Text>}></Divider>
+            
           </Collapse>
           <Space h="sm" />
 
