@@ -8,6 +8,7 @@ import { useMediaQuery } from 'react-responsive';
 import { AgendaItem } from './components/AgendaItem';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
+import { set } from 'date-fns';
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
   const [isStriped, setIsStriped] = useState(true);
   const [isAnimated, setIsAnimated] = useState(true);
   const isMobile = useMediaQuery({ maxWidth: 500 }); // set the maximum width for mobile devices
+  const [textareaValue, setTextareaValue] = useState("");
 
   // Calculate total duration of the meeting in minutes
   const totalDuration = agenda.reduce((acc, item) => acc + item.duration, 0);
@@ -73,6 +75,7 @@ export default function App() {
 
 
   const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(event.target.value);
     const items = event.target.value.split('\n').map(line => {
       const [name, description, duration] = line.split(':');
       if (!duration || isNaN(Number(duration))) {
@@ -82,6 +85,14 @@ export default function App() {
     }).filter((item): item is AgendaItem => item !== null);
     setAgenda(items);
   }
+
+  const pasteSample = () => {
+    const sample = `Introduction: 5`;
+    setTextareaValue(sample);
+  }
+
+
+
   // ******************************************************
   return (
     <>
@@ -122,9 +133,11 @@ export default function App() {
                 {/* <Button onClick={handleStartMeeting} size='xs'>Start meeting</Button> */}
                 <Chip defaultChecked={isStriped} variant="filled" color='dark' size='xs' onChange={(event) => { setIsStriped(event.valueOf()); }}>Striped</Chip>
                 <Chip defaultChecked={isAnimated} variant="filled" color='dark' size='xs' onChange={(event) => { setIsAnimated(event.valueOf()); }}>Animated</Chip>
+                <Button variant="light" size="xs" onClick={pasteSample}>Paste a sample</Button>
               </Flex>
             </Flex>
             <Textarea
+              value={textareaValue}
               label="Agenda"
               placeholder="Item 1 : Description 1 : 10
               Item 2 : Description 2 : 20
@@ -146,7 +159,7 @@ export default function App() {
             <Grid.Col span="content">
               <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"} />
             </Grid.Col>
-            <Grid.Col span={10} >
+            <Grid.Col span={isMobile ? 10 : 'auto'}>
             
                 {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
                 {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
