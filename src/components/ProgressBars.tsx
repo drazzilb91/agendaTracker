@@ -5,16 +5,19 @@ import { AgendaItem } from './AgendaItem';
 import { colors } from '../helpers/colors';
 
 type SectionedProgressBarProps = {
-  agenda: AgendaItem[];
+  agenda: AgendaItem[],
+  totalDuration: number,
+  textSize?: number|string,
+
 }
 
-export function SectionedProgressBar({ agenda }: SectionedProgressBarProps) {
+export function SectionedProgressBar({ agenda, totalDuration, textSize }: SectionedProgressBarProps) {
   const [hovered, setHovered] = useState(-1);
-  console.log(hovered);
+  hovered;
   const reset = () => setHovered(-1);
 
   const mySections: ProgressProps["sections"] = agenda.map((item, index) => ({
-    value: item.duration,
+    value: item.duration / totalDuration * 100,
     color: colors[index % colors.length], // Use modulo operator to prevent index out of bounds
     label: item.name,
     tooltip: item.description,
@@ -26,40 +29,10 @@ export function SectionedProgressBar({ agenda }: SectionedProgressBarProps) {
   return (
       <Progress
         onMouseLeave={() => setHovered(-1)}
-        size="xl"
+        size={textSize}
+        mih={30}
         radius="md"
         sections={mySections}
       />
   );
 }
-
-
-
-//  Below here, everything is not currently used in the app
-//  but is left here for reference
-// export function TooltipProgressBar({ value }: StripedProgressBarProps, agenda?: AgendaItem[]) {
-//     if (!agenda) {
-//         return <Progress color="teal" size={50} value={value}  striped animate />;
-//     }
-    
-//   return (
-//     <Progress
-//       radius="md"
-//       size={30}
-//       sections={[
-//         { value: 33, color: 'pink', label: 'Documents', tooltip: 'Document - 33 Gb' },
-//         { value: 28, color: 'grape', label: 'Apps', tooltip: 'Apps - 28 Gb' },
-//         { value: 25, color: 'violet', label: 'Other', tooltip: 'Other - 25 Gb' },
-//       ]}
-//     />
-//   );
-// }
-
-
-// export function StripedProgressBar({ value }: StripedProgressBarProps) {
-//     return <Progress color="teal" size={50} value={value} striped animate />;
-//   }
-
-// type StripedProgressBarProps = {
-//   value: number;
-// }
