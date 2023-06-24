@@ -24,17 +24,6 @@ export function MyRingProgress({value, color, duration}: {value: number, color: 
           </Text>
         }
       />
-
-      {/* <RingProgress
-        sections={[{ value: value, color: color}]}
-        label={
-          <Center>
-            <ThemeIcon color="teal" variant="light" radius="xl" size="xl">
-              <IconCheck size={22} />
-            </ThemeIcon>
-          </Center>
-        }
-      /> */}
     </>
   );
 }

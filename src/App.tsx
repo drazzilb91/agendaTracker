@@ -58,27 +58,6 @@ export default function App() {
     };
   }, [startTime, totalDuration, agenda]);
 
-  // ...
-  // const handleStartMeeting = () => {
-
-  //   if (date && time) {
-  //     const startDateTime = new Date(
-  //       date.getFullYear(),
-  //       date.getMonth(),
-  //       date.getDate(),
-  //       time.getHours(),
-  //       time.getMinutes(),
-  //       time.getSeconds()
-  //     );
-
-  //     setStartTime(startDateTime);
-  //   } else {
-  //     setStartTime(new Date());
-  //     console.warn('handleStartMeeting : date and time vars are null');
-  //   }
-  // };
-
-
   /**
    * Parse agenda text into an array of AgendaItem objects
    *
@@ -100,13 +79,6 @@ export default function App() {
   const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextareaValue(event.target.value);
     const items = parseAgenda(event.target.value);
-    // const items = event.target.value.split('\n').map(line => {
-    //   const [name, description, duration] = line.split(':');
-    //   if (!duration || isNaN(Number(duration))) {
-    //     return null; // ignore lines without a valid duration
-    //   }
-    //   return { name, description, duration: Number(duration) };
-    // }).filter((item): item is AgendaItem => item !== null);
     setAgenda(items);
   }
 
@@ -145,17 +117,7 @@ export default function App() {
                 value={startTime}
                 onChange={(newValue) => { setStartTime(newValue); }}
               />
-                            {/* <DateTimePicker
-                size='xs'
-                valueFormat="DD MMM YYYY hh:mm A"
-                label="Pick date and time"
-                placeholder="Pick date and time"
-                maw={200}
-                value={date}
-                onChange={(newValue) => { setDate(newValue); setTime(newValue); }}
-              /> */}
               <Flex justify="flex-start" align="center" direction="row" wrap="wrap" gap="sm">
-                {/* <Button onClick={handleStartMeeting} size='xs'>Start meeting</Button> */}
                 <Chip defaultChecked={isStriped} variant="filled" color='dark' size='xs' onChange={(event) => { setIsStriped(event.valueOf()); }}>Striped</Chip>
                 <Chip defaultChecked={isAnimated} variant="filled" color='dark' size='xs' onChange={(event) => { setIsAnimated(event.valueOf()); }}>Animated</Chip>
                 <Button variant="light" size="xs" onClick={pasteSample}>Paste a sample</Button>
@@ -183,13 +145,11 @@ export default function App() {
               <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"} />
             </Grid.Col>
             <Grid.Col span={isMobile ? 10 : 'auto'}>
-            
                 {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
                 {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
                 {elapsed >= 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
                 <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animate={isAnimated} />
                 <SectionedProgressBar agenda={agenda} totalDuration={totalDuration} textSize={isMobile ? 15 : 25} />
-              
             </Grid.Col>
           </Grid>
           }
@@ -223,7 +183,6 @@ export default function App() {
                     wrap="wrap"
                   >
                     <Text size={isMobile ? 'xs' : 'l'} >{currentItem.name}</Text>
-                    {/* <Text>{currentItem.duration} minutes</Text> */}
                     {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minute</Text>}
                     {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minutes</Text>}
                     <Text size={isMobile ? 'xs' : 'l'} >{currentItem.description}</Text>

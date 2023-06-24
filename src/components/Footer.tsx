@@ -28,36 +28,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-// interface FooterCenteredProps {
-//   links: { link: string; label: string }[];
-// }
-
 export function FooterCentered() {
   const { classes } = useStyles();
-  // const items = links.map((link) => (
-  //   <Anchor<'a'>
-  //     color="dimmed"
-  //     key={link.label}
-  //     href={link.link}
-  //     sx={{ lineHeight: 1 }}
-  //     onClick={(event) => event.preventDefault()}
-  //     size="sm"
-  //   >
-  //     {link.label}
-  //   </Anchor>
-  // ));
 
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        {/* <Group spacing="xs" position="right" noWrap>
-        </Group> */}
-        {/* <Group className={classes.inner}  > */}
             <Text size="sm" color="dimmed">MM</Text>
-            {/* {items} */}
-        {/* </Group> */}
-        {/* <Group spacing="xs" position="right" noWrap>
-        </Group> */}
       </div>
     </div>
   );
