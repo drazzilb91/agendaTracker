@@ -1,7 +1,7 @@
 import { Button, Chip, Collapse, Divider, Flex, Grid, Paper, Progress, Space, Text, Textarea, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -17,7 +17,7 @@ export default function App() {
   // const [date, setDate] = useState<Date | null>(new Date());
   // const [time, setTime] = useState<Date | null>(new Date());
   const [progress, setProgress] = useState(0);
-  const [startTime, setStartTime] = useState<Date | null>(new Date());
+  const [startTime, setStartTime] = useState<string | null>(new Date().toISOString());
   const [currentItem, setCurrentItem] = useState<AgendaItem | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [opened, { toggle }] = useDisclosure(true);
@@ -37,8 +37,9 @@ export default function App() {
   useEffect(() => {
     const timer = setInterval(() => {
       if (startTime) {
+        const startDate = new Date(startTime);
         const now = new Date();
-        const minutesElapsed = (now.getTime() - startTime.getTime()) / 60000;
+        const minutesElapsed = (now.getTime() - startDate.getTime()) / 60000;
         setElapsed(minutesElapsed);
         const newProgress = Math.min((minutesElapsed / totalDuration) * 100, 100);
         setProgress(newProgress);
@@ -77,12 +78,16 @@ export default function App() {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Title order={3} align="center">Meeting Agenda Timer</Title>
+        <Title order={3} ta="center">Meeting Agenda Timer</Title>
         <Space h="lg" />
 
         <Paper shadow="xl" radius="md" p="md" withBorder maw={1200}>
           <Button onClick={toggle} size='xs'>Collapse/Expand</Button>
-          <Collapse in={opened} transitionDuration={2000} transitionTimingFunction="linear">
+          <Collapse
+            expanded={opened}
+            transitionDuration={2000}
+            transitionTimingFunction="linear"
+          >
             <Flex
               mih={50}
               gap="sm"
@@ -131,7 +136,7 @@ export default function App() {
                 {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
                 {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
                 {elapsed >= 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
-                <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animate={isAnimated} />
+                <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animated={isAnimated} />
                 <SectionedProgressBar agenda={agenda} totalDuration={totalDuration} textSize={isMobile ? 15 : 25} />
             </Grid.Col>
           </Grid>

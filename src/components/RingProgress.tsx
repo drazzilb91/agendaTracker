@@ -19,7 +19,7 @@ export function MyRingProgress({value, color, duration}: {value: number, color: 
       <RingProgress
         sections={[{ value: inverseValue, color: myColor}]}
         label={
-          <Text color="blue" weight={700} align="center" size="xl">
+          <Text color="blue" fw={700} ta="center" size="xl">
             {Math.round(remaining).toString()}
           </Text>
         }
