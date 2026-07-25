@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target":"agendaclock",
+    "target": "agendaclock",
     "public": "dist",
     "ignore": [
       "firebase.json",
