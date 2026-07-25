@@ -3,7 +3,7 @@ import { RingProgress, Text } from '@mantine/core';
 export function MyRingProgress({value, color, duration}: {value: number, color: string, duration: number}) {
     const inverseValue = 100 - value;
     const remaining = duration * inverseValue / 100;
-    let myColor = color;
+    let myColor: string;
     if (inverseValue < 5) {
         myColor = "red";
     } else if (inverseValue < 10) {
@@ -11,7 +11,7 @@ export function MyRingProgress({value, color, duration}: {value: number, color: 
     } else if (inverseValue < 25) {
         myColor = "yellow";
     } else {
-        myColor = "green";
+        myColor = color;
     }
 
   return (

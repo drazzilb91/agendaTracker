@@ -12,8 +12,7 @@ type SectionedProgressBarProps = {
 }
 
 export function SectionedProgressBar({ agenda, totalDuration, textSize }: SectionedProgressBarProps) {
-  const [hovered, setHovered] = useState(-1);
-  hovered;
+  const [, setHovered] = useState(-1);
   const reset = () => setHovered(-1);
 
   return (
