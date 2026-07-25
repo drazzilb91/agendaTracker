@@ -11,13 +11,17 @@ import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
 import { parseAgenda } from './helpers/parseAgenda';
 
+function toDateString(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
 
 export default function App() {
   const [agenda, setAgenda] = useState<AgendaItem[]>(defaultAgenda);
   // const [date, setDate] = useState<Date | null>(new Date());
   // const [time, setTime] = useState<Date | null>(new Date());
   const [progress, setProgress] = useState(0);
-  const [startTime, setStartTime] = useState<Date | null>(new Date());
+  const [startTime, setStartTime] = useState<string | null>(toDateString(new Date()));
   const [currentItem, setCurrentItem] = useState<AgendaItem | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [opened, { toggle }] = useDisclosure(true);
@@ -38,7 +42,8 @@ export default function App() {
     const timer = setInterval(() => {
       if (startTime) {
         const now = new Date();
-        const minutesElapsed = (now.getTime() - startTime.getTime()) / 60000;
+        const startDate = new Date(startTime.replace(' ', 'T'));
+        const minutesElapsed = (now.getTime() - startDate.getTime()) / 60000;
         setElapsed(minutesElapsed);
         const newProgress = Math.min((minutesElapsed / totalDuration) * 100, 100);
         setProgress(newProgress);
@@ -77,12 +82,12 @@ export default function App() {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Title order={3} align="center">Meeting Agenda Timer</Title>
+        <Title order={3} ta="center">Meeting Agenda Timer</Title>
         <Space h="lg" />
 
         <Paper shadow="xl" radius="md" p="md" withBorder maw={1200}>
           <Button onClick={toggle} size='xs'>Collapse/Expand</Button>
-          <Collapse in={opened} transitionDuration={2000} transitionTimingFunction="linear">
+          <Collapse expanded={opened} transitionDuration={2000} transitionTimingFunction="linear">
             <Flex
               mih={50}
               gap="sm"
@@ -128,10 +133,10 @@ export default function App() {
               <MyRingProgress value={progress} duration={currentItem?.duration} color={"red"} />
             </Grid.Col>
             <Grid.Col span={isMobile ? 10 : 'auto'}>
-                {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
-                {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
-                {elapsed >= 2 && <Text size={isMobile ? 'xs' : 'l'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
-                <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animate={isAnimated} />
+                {elapsed > 0 && elapsed < 1 && <Text size={isMobile ? 'xs' : 'lg'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+                {elapsed >= 1 && elapsed < 2 && <Text size={isMobile ? 'xs' : 'lg'}>Elapsed: {Math.floor(elapsed)} minute</Text>}
+                {elapsed >= 2 && <Text size={isMobile ? 'xs' : 'lg'}>Elapsed: {Math.floor(elapsed)} minutes</Text>}
+                <Progress value={progress} size="xl" radius="xl" color='black' striped={isStriped} animated={isAnimated} />
                 <SectionedProgressBar agenda={agenda} totalDuration={totalDuration} textSize={isMobile ? 15 : 25} />
             </Grid.Col>
           </Grid>
@@ -150,9 +155,9 @@ export default function App() {
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text size={isMobile ? 'xs' : 'l'} >Current Item:</Text>
-                    <Text size={isMobile ? 'xs' : 'l'} >Duration:</Text>
-                    <Text size={isMobile ? 'xs' : 'l'} >Description:</Text>
+                    <Text size={isMobile ? 'xs' : 'lg'} >Current Item:</Text>
+                    <Text size={isMobile ? 'xs' : 'lg'} >Duration:</Text>
+                    <Text size={isMobile ? 'xs' : 'lg'} >Description:</Text>
                   </Flex>
                 </Grid.Col>
 
@@ -165,10 +170,10 @@ export default function App() {
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.name}</Text>
-                    {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minute</Text>}
-                    {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minutes</Text>}
-                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.description}</Text>
+                    <Text size={isMobile ? 'xs' : 'lg'} >{currentItem.name}</Text>
+                    {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 'lg'} >{Math.floor(currentItem.duration)} minute</Text>}
+                    {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 'lg'} >{Math.floor(currentItem.duration)} minutes</Text>}
+                    <Text size={isMobile ? 'xs' : 'lg'} >{currentItem.description}</Text>
                   </Flex>
                 </Grid.Col>
               </Grid>
