@@ -11,6 +11,8 @@ import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
 import { parseAgenda } from './helpers/parseAgenda';
 
+import { AgendaTimeline } from './components/Timeline';
+
 
 export default function App() {
   const [agenda, setAgenda] = useState<AgendaItem[]>(defaultAgenda);
@@ -19,13 +21,14 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [startTime, setStartTime] = useState<string | null>(new Date().toISOString());
   const [currentItem, setCurrentItem] = useState<AgendaItem | null>(null);
+  const [currentItemIndex, setCurentItemIndex] = useState(-1);
   const [elapsed, setElapsed] = useState(0);
   const [opened, { toggle }] = useDisclosure(true);
   const [isStriped, setIsStriped] = useState(true);
   const [isAnimated, setIsAnimated] = useState(true);
   const isMobile = useMediaQuery({ maxWidth: 500 }); // set the maximum width for mobile devices
   const [textareaValue, setTextareaValue] = useState("");
-
+const [isStarted, setIsStarted] = useState(false);
   // Calculate total duration of the meeting in minutes
   const totalDuration = agenda.reduce((acc, item) => acc + item.duration, 0);
 
@@ -39,7 +42,13 @@ export default function App() {
       if (startTime) {
         const startDate = new Date(startTime);
         const now = new Date();
-        const minutesElapsed = (now.getTime() - startDate.getTime()) / 60000;
+        const secondsElapsed = (now.getTime() - startDate.getTime()) / 1000;
+        if (secondsElapsed > 0) {
+          setIsStarted(true);
+        } else {
+          setIsStarted(false);
+        }
+        const minutesElapsed = secondsElapsed / 60;
         setElapsed(minutesElapsed);
         const newProgress = Math.min((minutesElapsed / totalDuration) * 100, 100);
         setProgress(newProgress);
@@ -48,6 +57,7 @@ export default function App() {
         for (let i = 0; i < agenda.length; i++) {
           if (elapsed <= agenda[i].duration) {
             setCurrentItem(agenda[i]);
+            setCurentItemIndex(i);
             break;
           }
           elapsed -= agenda[i].duration;
@@ -145,7 +155,7 @@ export default function App() {
 
           {currentItem && (
             <>
-              <Grid columns={2}>
+              {/* <Grid columns={2}>
                 <Grid.Col span="content">
                   <Flex
                     mih={50}
@@ -155,9 +165,9 @@ export default function App() {
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text size={isMobile ? 'xs' : 'l'} >Current Item:</Text>
-                    <Text size={isMobile ? 'xs' : 'l'} >Duration:</Text>
-                    <Text size={isMobile ? 'xs' : 'l'} >Description:</Text>
+                    <Text size={isMobile ? 'xs' : 's'} >Current Item:</Text>
+                    <Text size={isMobile ? 'xs' : 's'} >Duration:</Text>
+                    <Text size={isMobile ? 'xs' : 's'} >Description:</Text>
                   </Flex>
                 </Grid.Col>
 
@@ -170,13 +180,15 @@ export default function App() {
                     direction="column"
                     wrap="wrap"
                   >
-                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.name}</Text>
-                    {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minute</Text>}
-                    {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 'l'} >{Math.floor(currentItem.duration)} minutes</Text>}
-                    <Text size={isMobile ? 'xs' : 'l'} >{currentItem.description}</Text>
+                    <Text size={isMobile ? 'xs' : 's'} >{currentItem.name}</Text>
+                    {currentItem.duration == 1 && <Text size={isMobile ? 'xs' : 's'} >{Math.floor(currentItem.duration)} minute</Text>}
+                    {currentItem.duration > 1 && <Text size={isMobile ? 'xs' : 's'} >{Math.floor(currentItem.duration)} minutes</Text>}
+                    <Text size={isMobile ? 'xs' : 's'} >{currentItem.description}</Text>
                   </Flex>
                 </Grid.Col>
-              </Grid>
+              </Grid> */}
+
+              <AgendaTimeline agenda={agenda} isMobile={isMobile} currentItemIndex={currentItemIndex} isStarted={isStarted}/>
 
             </>)}
 
