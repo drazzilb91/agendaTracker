@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './assets/App.css'
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
 import { MantineProvider } from '@mantine/core'
 
 if ('serviceWorker' in navigator) {
@@ -20,8 +22,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MantineProvider
       theme={{ primaryShade: { light: 6, dark: 8 } }}
-      withGlobalStyles
-      withNormalizeCSS
     >
       <App />
     </MantineProvider>

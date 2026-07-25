@@ -1,40 +1,22 @@
-import { Text, createStyles, rem } from '@mantine/core';
+import { Text } from '@mantine/core';
 
-const useStyles = createStyles((theme) => ({
-  footer: {
-    marginTop: rem(120),
+const footerStyle: React.CSSProperties = {
+  marginTop: '120px',
+  borderTop: '1px solid #e9ecef',
+};
 
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
-    }`,
-  },
-
-  inner: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: `${theme.spacing.md} ${theme.spacing.md}`,
-
-    [theme.fn.smallerThan('sm')]: {
-      flexDirection: 'column',
-    },
-  },
-
-  links: {
-    [theme.fn.smallerThan('sm')]: {
-      marginTop: theme.spacing.lg,
-      marginBottom: theme.spacing.sm,
-    },
-  },
-}));
+const innerStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '16px',
+};
 
 export function FooterCentered() {
-  const { classes } = useStyles();
-
   return (
-    <div className={classes.footer}>
-      <div className={classes.inner}>
-            <Text size="sm" color="dimmed">MM</Text>
+    <div style={footerStyle}>
+      <div style={innerStyle}>
+            <Text size="sm" c="dimmed">MM</Text>
       </div>
     </div>
   );
