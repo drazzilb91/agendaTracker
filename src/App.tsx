@@ -9,6 +9,7 @@ import { AgendaItem } from './components/AgendaItem';
 import { FooterCentered } from './components/Footer';
 import { SectionedProgressBar } from './components/ProgressBars';
 import { MyRingProgress } from './components/RingProgress';
+import { parseAgenda } from './helpers/parseAgenda';
 
 
 export default function App() {
@@ -57,24 +58,6 @@ export default function App() {
       clearInterval(timer);
     };
   }, [startTime, totalDuration, agenda]);
-
-  /**
-   * Parse agenda text into an array of AgendaItem objects
-   *
-   * @param {string} text
-   * @return {*} 
-   */
-  function parseAgenda(text: string) {
-    const items = text.split('\n').map(line => {
-      const [name, description, duration] = line.split(':');
-      if (!duration || isNaN(Number(duration))) {
-        return null; // ignore lines without a valid duration
-      }
-      return { name, description, duration: Number(duration) };
-    }).filter((item): item is AgendaItem => item !== null);
-    return items;
-  }
-
 
   const handleAgendaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextareaValue(event.target.value);
