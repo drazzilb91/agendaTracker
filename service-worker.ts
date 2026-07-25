@@ -17,6 +17,11 @@ self.addEventListener('install', (event: ExtendableEvent) => {
 self.addEventListener('fetch', (event: FetchEvent) => {
     event.respondWith(
         caches.open(CACHE_NAME).then(async (cache) => {
+            // Always try network first for page navigations to avoid stale HTML that references old bundles.
+            if (event.request.mode === 'navigate') {
+                return fetchAndUpdateCache(cache, event.request).catch(() => cache.match('/'));
+            }
+
             const cachedResponse = await cache.match(event.request);
             if (!cachedResponse || !cachedResponse.headers.has('date')) {
                 return fetchAndUpdateCache(cache, event.request);

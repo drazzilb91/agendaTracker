@@ -52,7 +52,12 @@ self.addEventListener('fetch', function (event) {
         var cachedResponse, cachedAt, isExpired;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, cache.match(event.request)];
+                case 0:
+                    // Always try network first for page navigations to avoid stale HTML that references old bundles.
+                    if (event.request.mode === 'navigate') {
+                        return [2 /*return*/, fetchAndUpdateCache(cache, event.request).catch(function () { return cache.match('/'); })];
+                    }
+                    return [4 /*yield*/, cache.match(event.request)];
                 case 1:
                     cachedResponse = _a.sent();
                     if (!cachedResponse || !cachedResponse.headers.has('date')) {

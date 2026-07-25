@@ -1,22 +1,22 @@
-import { Text } from '@mantine/core';
-
-const footerStyle: React.CSSProperties = {
-  marginTop: '120px',
-  borderTop: '1px solid #e9ecef',
-};
-
-const innerStyle: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '16px',
-};
+import { Text, rem } from '@mantine/core';
 
 export function FooterCentered() {
   return (
-    <div style={footerStyle}>
-      <div style={innerStyle}>
-            <Text size="sm" c="dimmed">MM</Text>
+    <div
+      style={{
+        marginTop: rem(120),
+        borderTop: `${rem(1)} solid var(--mantine-color-gray-3)`,
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: `${rem(16)} ${rem(16)}`,
+        }}
+      >
+            <Text size="sm" color="dimmed">MM</Text>
       </div>
     </div>
   );
