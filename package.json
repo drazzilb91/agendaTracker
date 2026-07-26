@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "tsc service-worker.ts --outDir public --lib webworker,es2020 --skipLibCheck",
+    "prebuild": "tsc -p tsconfig.sw.json",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",

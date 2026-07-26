@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "public",
+    "lib": ["ES2020", "WebWorker"],
+    "isolatedModules": false,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["service-worker.ts"]
+}

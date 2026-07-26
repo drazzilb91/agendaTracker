@@ -3,8 +3,9 @@ const urlsToCache = [
     '/',
 ];
 const TTL_IN_HOURS = 24; // set TTL to 24 hours
+const serviceWorker = self as unknown as ServiceWorkerGlobalScope;
 
-self.addEventListener('install', (event: ExtendableEvent) => {
+serviceWorker.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -14,12 +15,14 @@ self.addEventListener('install', (event: ExtendableEvent) => {
     );
 });
 
-self.addEventListener('fetch', (event: FetchEvent) => {
+serviceWorker.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.open(CACHE_NAME).then(async (cache) => {
             // Always try network first for page navigations to avoid stale HTML that references old bundles.
             if (event.request.mode === 'navigate') {
-                return fetchAndUpdateCache(cache, event.request).catch(() => cache.match('/'));
+                return fetchAndUpdateCache(cache, event.request).catch(async () =>
+                    (await cache.match('/')) ?? Response.error()
+                );
             }
 
             const cachedResponse = await cache.match(event.request);
