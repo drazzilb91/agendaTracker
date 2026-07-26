@@ -1,7 +1,7 @@
 import { Button, Chip, Collapse, Divider, Flex, Grid, Paper, Progress, Space, Text, Textarea, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
