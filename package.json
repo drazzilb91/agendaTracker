@@ -20,7 +20,7 @@
     "@mantine/hooks": "^9.4.2",
     "@mui/joy": "5.0.0-beta.52",
     "@mui/material": "^9.3.1",
-    "@mui/x-data-grid": "^9.10.1",
+    "@mui/x-data-grid": "^9.11.0",
     "@mui/x-data-grid-generator": "^9.11.0",
     "@mui/x-data-grid-premium": "^9.10.1",
     "@mui/x-data-grid-pro": "^9.11.0",
