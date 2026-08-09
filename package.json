@@ -24,7 +24,7 @@
     "@mui/x-data-grid-generator": "^9.11.0",
     "@mui/x-data-grid-premium": "^9.10.1",
     "@mui/x-data-grid-pro": "^9.11.0",
-    "@mui/x-date-pickers": "^9.10.1",
+    "@mui/x-date-pickers": "^9.11.0",
     "@tabler/icons-react": "^3.46.0",
     "date-fns": "^4.4.0",
     "dayjs": "^1.11.21",
