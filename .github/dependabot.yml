@@ -4,6 +4,60 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
     labels:
       - "dependencies"
+    groups:
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+          - "@types/react-dom"
+          - "react-responsive"
+          - "@vitejs/plugin-react"
+        update-types:
+          - "minor"
+          - "patch"
+
+      ui-libraries:
+        patterns:
+          - "@mui/*"
+          - "@mantine/*"
+          - "@emotion/*"
+          - "@tabler/icons-react"
+        update-types:
+          - "minor"
+          - "patch"
+
+      date-time:
+        patterns:
+          - "date-fns"
+          - "dayjs"
+          - "luxon"
+        update-types:
+          - "minor"
+          - "patch"
+
+      test-tooling:
+        patterns:
+          - "@testing-library/*"
+          - "vitest"
+          - "jsdom"
+        update-types:
+          - "minor"
+          - "patch"
+
+      build-and-lint:
+        patterns:
+          - "typescript"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "@eslint/*"
+          - "eslint*"
+          - "globals"
+          - "vite"
+          - "rollup-plugin-copy"
+        update-types:
+          - "minor"
+          - "patch"
