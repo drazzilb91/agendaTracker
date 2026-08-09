@@ -1,0 +1,19 @@
+name: Set up Node.js and pnpm
+description: Install the repository's pinned pnpm version and configure Node.js with pnpm caching
+inputs:
+  node-version:
+    description: Node.js version to install
+    required: false
+    default: '24'
+runs:
+  using: composite
+  steps:
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
