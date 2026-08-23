@@ -27,7 +27,7 @@
     "@mui/x-date-pickers": "^9.11.0",
     "@tabler/icons-react": "^3.46.0",
     "date-fns": "^4.4.0",
-    "dayjs": "^1.11.21",
+    "dayjs": "^1.11.23",
     "luxon": "^3.7.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
