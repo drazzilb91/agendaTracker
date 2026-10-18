@@ -29,8 +29,8 @@
     "date-fns": "^4.4.0",
     "dayjs": "^1.11.23",
     "luxon": "^3.7.2",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "react-responsive": "^10.0.1"
   },
   "devDependencies": {
